@@ -14,6 +14,8 @@ export class FunctionModel{
 
     safeMethod: boolean
 
+    resultType: Type
+
     constructor(public readonly name:string,public readonly async:boolean=false){}
 
     with(name:string,t:Type){
@@ -22,7 +24,7 @@ export class FunctionModel{
 
     invoker: Func1;
 
-    call():Func1{
+    caller():Func1{
         return this.invoker;
     }
 }
@@ -47,7 +49,7 @@ export class DerivedMethod extends MethodModel{
         })
     }
 
-    call():functors.Func1{
+    caller():functors.Func1{
         var mappings:functors.Func2[]=[];
         this.original.parameters.forEach(x=>{
             if (registry.hasRule(this.owner,x.type)){
@@ -58,7 +60,7 @@ export class DerivedMethod extends MethodModel{
             }
         })
         var argPreparer=all2(mappings);
-        var orig=this.original.call();
+        var orig=this.original.caller();
         return function (data:any) {
             let converted={};
             argPreparer(data,converted);
@@ -67,7 +69,6 @@ export class DerivedMethod extends MethodModel{
     }
 }
 
-
 export function shouldBeMethodOf(t:Type, m:FunctionModel):boolean{
     var result=false;
     m.parameters.forEach(x=>{
@@ -75,10 +76,5 @@ export function shouldBeMethodOf(t:Type, m:FunctionModel):boolean{
             result=true;
         }
     })
-    return result;
-}
-
-export function deriveMethodModel(t:Type,f:FunctionModel): MethodModel{
-    var result=new DerivedMethod(f,t);
     return result;
 }

@@ -9,7 +9,6 @@ export function combine(f1:Func1,f2:Func1):Func1{
         return f2(f1(x));
     }
 }
-
 export const identity:Func1=(x:any)=>x;
 
 export function constFunc(val:any):Func1{
@@ -28,8 +27,6 @@ export function all2(f:Func2[]):Func2{
         return f.map(v=>v(x,y));
     }
 }
-
-
 export function all(f:Func1[]):Func1{
     return function(x){
         return f.map(y=>y(x));

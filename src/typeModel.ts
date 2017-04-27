@@ -38,7 +38,6 @@ export class SimpleMember{
 
 export class PropertyModel implements MemberModel{
 
-
     constructor(private m:ops.FunctionModel){}
 
     name(){
@@ -65,7 +64,7 @@ export class PropertyModel implements MemberModel{
 
     value(base:any,options?:any){
         if (!this._func) {
-            this._func=this.m.call();
+            this._func=this.m.caller();
         }
         var rs:any={};
         rs.self=base;
@@ -107,9 +106,8 @@ export interface PagingModel {
 
 export class PageNumberPaging implements PagingModel{
 
-    constructor(public readonly pageNum:string,public readonly limit?: string){
+    constructor(public readonly pageNum:string,public readonly limit?: string){}
 
-    }
     consumes(p:ops.Parameter):boolean{
         return p.name==this.pageNum||p.name==this.limit;
     }
@@ -145,28 +143,5 @@ export class InstanceModel{
 export class PagedCollection{
 
     constructor(private base,private property:PagedProperty){
-
     }
 }
-
-declare var console:any
-declare function setTimeout(v:any,v1:any)
-
-var fs=new ops.FunctionModel("counter");
-fs.invoker=function (x:any) {
-    return new Promise(function(resolve,reject){
-        setTimeout(function(){
-            resolve(x.self)
-        },5000)
-    })
-}
-
-//ops.MethodModel
-var mm=new PropertyModel(fs);
-var rs=mm.value(3);
-rs.then(x=>{
-    console.log(x);
-})
-
-
-//var rr=mm.value({name:"Pavel"});
